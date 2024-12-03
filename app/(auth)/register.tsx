@@ -8,6 +8,7 @@ import { registerUser, monitorAuthState } from "@/features/auth/authThunks";
 
 export default function Register() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { error, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -51,6 +52,14 @@ export default function Register() {
 
         <Input
           className="mb-4"
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
+
+        <Input
+          className="mb-4"
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
@@ -68,7 +77,7 @@ export default function Register() {
         <Button
           className="mb-6"
           onPress={handleRegister}
-          disabled={!email || !password || !confirmPassword}
+          disabled={!email || !password || !confirmPassword || !username}
         >
           <Text>Sign Up</Text>
         </Button>

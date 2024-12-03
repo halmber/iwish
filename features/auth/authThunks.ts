@@ -8,7 +8,6 @@ import {
 import { firebaseAuth } from "@/firebaseConfig";
 import { setUser } from "./authSlice";
 import { AuthCredentials, RegisterCredentials } from "./types";
-import { router } from "expo-router";
 import { AppThunk } from "@/store";
 import { clearUser } from "./authSlice";
 
@@ -31,7 +30,6 @@ export const loginUser = createAsyncThunk(
         email,
         password,
       );
-      router.replace("/(app)/home");
 
       return userCredential.user;
     } catch (error) {
@@ -56,7 +54,6 @@ export const registerUser = createAsyncThunk(
         email,
         password,
       );
-      router.replace("/(app)/home");
 
       return userCredential.user;
     } catch (error) {
