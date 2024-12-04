@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   Unsubscribe,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import { firebaseAuth } from "@/firebaseConfig";
 import { setUser } from "./authSlice";
@@ -25,13 +26,13 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ email, password }: AuthCredentials, { rejectWithValue }) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const { user } = await signInWithEmailAndPassword(
         firebaseAuth,
         email,
         password,
       );
 
-      return userCredential.user;
+      return user;
     } catch (error) {
       return rejectWithValue("Invalid email or password");
     }
@@ -41,7 +42,7 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   "auth/register",
   async (
-    { email, password, confirmPassword }: RegisterCredentials,
+    { email, password, confirmPassword, username }: RegisterCredentials,
     { rejectWithValue },
   ) => {
     if (password !== confirmPassword) {
@@ -49,13 +50,20 @@ export const registerUser = createAsyncThunk(
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+      const { user } = await createUserWithEmailAndPassword(
         firebaseAuth,
         email,
         password,
       );
 
-      return userCredential.user;
+      await updateProfile(user, {
+        displayName: username,
+      });
+
+      const updatedUser = { ...user };
+      updatedUser.displayName = username;
+
+      return updatedUser;
     } catch (error) {
       return rejectWithValue("Failed to create account");
     }

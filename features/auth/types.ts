@@ -5,4 +5,5 @@ export interface AuthCredentials {
 
 export interface RegisterCredentials extends AuthCredentials {
   confirmPassword: string;
+  username: string;
 }

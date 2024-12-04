@@ -24,7 +24,7 @@ export default function Register() {
   }, [isAuthenticated]);
 
   const handleRegister = () => {
-    dispatch(registerUser({ email, password, confirmPassword }));
+    dispatch(registerUser({ email, password, confirmPassword, username }));
   };
 
   return (

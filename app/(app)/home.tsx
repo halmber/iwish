@@ -20,7 +20,9 @@ export default function Home() {
     <SafeAreaView className="flex-1 bg-[#1e1f35]">
       <View className="flex-1 p-6 items-center justify-center">
         <Text className="text-3xl font-bold mb-2">Welcome!</Text>
-        <Text className="text-base text-gray-400 mb-8">{user?.email}</Text>
+        <Text className="text-base text-gray-400 mb-8">
+          {user?.displayName}
+        </Text>
 
         <Button className="w-full" onPress={handleLogout}>
           <Text>Sign Out </Text>
