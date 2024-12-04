@@ -1,27 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { View } from "react-native";
-import { Link, router } from "expo-router";
+import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Input, Text } from "@/components/ui/";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { registerUser, monitorAuthState } from "@/features/auth/authThunks";
+import { registerUser } from "@/features/auth/authThunks";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { error, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { error } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const unsubscribe = dispatch(monitorAuthState());
-    return () => unsubscribe();
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (isAuthenticated) router.replace("/(app)/home");
-  }, [isAuthenticated]);
 
   const handleRegister = () => {
     dispatch(registerUser({ email, password, confirmPassword, username }));
