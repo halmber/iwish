@@ -14,7 +14,7 @@ export default function AuthLayout() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace("/(app)/home");
+      router.replace("/(app)/");
     }
   }, [isAuthenticated]);
 
