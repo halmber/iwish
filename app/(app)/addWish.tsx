@@ -1,18 +1,10 @@
 import { useState } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  SafeAreaView,
-} from "react-native";
+import { View, ScrollView, Alert, SafeAreaView } from "react-native";
 import { Input, Button, Text } from "@/components/ui/";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
 import WishlistPicker from "@/components/addWish/WishlistPicker";
 import DesireLevelSelector from "@/components/addWish/DesireLevelSelector";
 import PriceInputs from "@/components/addWish/PriceInputs";
+import GiftDateSelector from "@/components/addWish/GiftDateSelector";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -27,13 +19,6 @@ export default function addWish() {
 
   const showToast = (message: string, type: "success" | "error") => {
     Alert.alert(type === "success" ? "Success" : "Error", message);
-  };
-
-  const pickDate = (_event: DateTimePickerEvent, date?: Date | undefined) => {
-    setShowDatePicker(false);
-    if (date) {
-      setDesiredGiftDate(date);
-    }
   };
 
   const handleSubmit = async () => {
@@ -125,24 +110,12 @@ export default function addWish() {
           />
         </View>
 
-        <View className="mb-4 flex-row justify-between">
-          <Text className="text-base font-medium mb-2">Desired Gift Date</Text>
-
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text className="text-xl text-[#ff6347]">
-              {desiredGiftDate.toLocaleDateString()}
-            </Text>
-          </TouchableOpacity>
-
-          {showDatePicker && (
-            <DateTimePicker
-              value={desiredGiftDate}
-              mode="date"
-              display="default"
-              onChange={pickDate}
-            />
-          )}
-        </View>
+        <GiftDateSelector
+          desiredGiftDate={desiredGiftDate}
+          setDesiredGiftDate={setDesiredGiftDate}
+          showDatePicker={showDatePicker}
+          setShowDatePicker={setShowDatePicker}
+        />
 
         <Button onPress={handleSubmit}>
           <Text className="font-bold">Add Wish</Text>
