@@ -12,6 +12,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import WishlistPicker from "@/components/addWish/WishlistPicker";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -20,7 +21,7 @@ export default function addWish() {
   const [currency, setCurrency] = useState("UAH");
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
-  const [wishlistId, setWishlistId] = useState("");
+  const [wishlistId, setWishlistId] = useState(""); // now uses like a list name
   const [desiredGiftDate, setDesiredGiftDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -64,6 +65,7 @@ export default function addWish() {
 
   const currencyOptions = ["UAH", "USD", "EUR", "GBP"];
   const defireLvls = [1, 2, 3, 4, 5];
+  const wishLists = ["My wishlist", "+ Create new list"];
 
   return (
     <View className="flex-1 bg-[#1e1f35] p-6">
@@ -72,29 +74,11 @@ export default function addWish() {
       </SafeAreaView>
 
       <ScrollView className="flex-1">
-        <View className="mb-4">
-          <Text className="text-base font-medium mb-2">Wishlist</Text>
-          <Picker
-            itemStyle={{ color: "white", backgroundColor: "#09090b" }}
-            selectedValue={wishlistId}
-            onValueChange={(itemValue) => setWishlistId(itemValue)}
-            mode="dropdown"
-            style={{ color: "white", backgroundColor: "#09090b" }}
-            dropdownIconColor="white"
-          >
-            {["My wishlist", "+ Create new list"].map((wl) => (
-              <Picker.Item
-                key={wl}
-                label={wl}
-                value={wl}
-                style={{
-                  color: "white",
-                  backgroundColor: "#09090b",
-                }}
-              />
-            ))}
-          </Picker>
-        </View>
+        <WishlistPicker
+          wishlistId={wishlistId}
+          wishlists={wishLists}
+          setWishlistId={setWishlistId}
+        />
 
         <View className="mb-4">
           <Text className="text-base font-medium mb-2">Title</Text>
