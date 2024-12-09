@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 
 // Initialize Firebase
@@ -16,3 +17,22 @@ export const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseAuth = initializeAuth(firebaseApp, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
+const db = getFirestore(firebaseApp);
+
+export const addDataToCollection = async <T>(
+  collectionName: string,
+  data: T,
+) => {
+  if (!data) {
+    throw new Error(
+      "Error while adding to firestore: Data cannot be undefined",
+    );
+  }
+
+  try {
+    const docRef = await addDoc(collection(db, collectionName), data);
+    return { id: docRef.id, ...data };
+  } catch (error) {
+    throw new Error(`Failed to add data to ${collectionName}: ${error}`);
+  }
+};
