@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { View, ScrollView, Alert, SafeAreaView } from "react-native";
-import { Input, Button, Text } from "@/components/ui/";
-import WishlistPicker from "@/components/addWish/WishlistPicker";
-import DesireLevelSelector from "@/components/addWish/DesireLevelSelector";
-import PriceInputs from "@/components/addWish/PriceInputs";
-import GiftDateSelector from "@/components/addWish/GiftDateSelector";
+import { Button, Text } from "@/components/ui/";
+import {
+  GiftDateSelector,
+  PriceInputs,
+  WishlistPicker,
+  DesireLevelSelector,
+  DescriptionInput,
+  TitleInput,
+  UrlInput,
+} from "@/components/addWish";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -62,54 +67,22 @@ export default function addWish() {
           wishlists={wishLists}
           setWishlistId={setWishlistId}
         />
-
-        <View className="mb-4">
-          <Text className="text-base font-medium mb-2">Title</Text>
-          <Input
-            placeholder="Title"
-            value={title}
-            onChangeText={setTitle}
-            maxLength={100}
-          />
-        </View>
-
+        <TitleInput title={title} setTitle={setTitle} />
         <DesireLevelSelector
           desireLvl={desireLvl}
           setDesireLvl={setDesireLvl}
         />
-
         <PriceInputs
           price={price}
           setPrice={setPrice}
           currency={currency}
           setCurrency={setCurrency}
         />
-
-        <View className="mb-4">
-          <Text className="text-base font-medium mb-2">URL</Text>
-          <Input
-            placeholder="URL"
-            value={url}
-            onChangeText={setUrl}
-            keyboardType="url"
-          />
-        </View>
-
-        <View className="mb-4">
-          <Text className="text-base font-medium mb-2">Description</Text>
-          <Input
-            placeholder="Write about your wish"
-            value={description}
-            onChangeText={setDescription}
-            multiline
-            style={{
-              height: 100,
-              textAlignVertical: "top",
-              paddingVertical: 10,
-            }}
-          />
-        </View>
-
+        <UrlInput url={url} setUrl={setUrl} />
+        <DescriptionInput
+          description={description}
+          setDescription={setDescription}
+        />
         <GiftDateSelector
           desiredGiftDate={desiredGiftDate}
           setDesiredGiftDate={setDesiredGiftDate}
