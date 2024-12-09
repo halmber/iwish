@@ -13,6 +13,7 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import WishlistPicker from "@/components/addWish/WishlistPicker";
+import DesireLevelSelector from "@/components/addWish/DesireLevelSelector";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -90,20 +91,10 @@ export default function addWish() {
           />
         </View>
 
-        <View className="flex-row justify-between mb-4">
-          <Text className="text-base font-medium mb-2">Desire Level</Text>
-          <View className="flex-row gap-2">
-            {defireLvls.map((level) => (
-              <TouchableOpacity key={level} onPress={() => setDesireLvl(level)}>
-                <FontAwesome
-                  name="heart"
-                  size={20}
-                  color={level <= desireLvl ? "red" : "gray"}
-                />
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
+        <DesireLevelSelector
+          desireLvl={desireLvl}
+          setDesireLvl={setDesireLvl}
+        />
 
         <View className="mb-4 flex-row justify-between">
           <View className="w-1/3">
