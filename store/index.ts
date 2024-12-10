@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import authReducer from "@/features/auth/authSlice";
 import wishesReducer from "@/features/wishes/wishesSlice";
+import listsReducer from "@/features/lists/listsSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     wishes: wishesReducer,
+    lists: listsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
