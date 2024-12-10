@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "./config";
 
 export const addDataToCollection = async <T>(
@@ -94,4 +94,36 @@ export const createListItem = async <T>(
   } catch (error) {
     throw new Error(`Failed to add item: ${error}`);
   }
+};
+
+/**
+ * Fetches all lists of a specific user.
+ * @param userId - ID of the user.
+ */
+export const getUserLists = async (userId: string) => {
+  const listsCollectionRef = collection(db, `users/${userId}/lists`);
+  const listsSnapshot = await getDocs(listsCollectionRef);
+  const lists = listsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as { id: string; name: string; type: string; createdAt: string }[];
+  return lists;
+};
+
+/**
+ * Fetches all items of a specific list for a user.
+ * @param userId - ID of the user.
+ * @param listId - ID of the list.
+ */
+export const getListItems = async <T>(userId: string, listId: string) => {
+  const itemsCollectionRef = collection(
+    db,
+    `users/${userId}/lists/${listId}/items`,
+  );
+  const itemsSnapshot = await getDocs(itemsCollectionRef);
+  const items = itemsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as (T & { id: string; createdAt: string })[];
+  return items;
 };
