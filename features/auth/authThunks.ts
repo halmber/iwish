@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
-import { firebaseAuth } from "@/firebaseConfig";
+import { firebaseAuth } from "@/services/firebase/config";
 import { setUser } from "./authSlice";
 import { AuthCredentials, RegisterCredentials } from "./types";
 import { AppThunk } from "@/store";
