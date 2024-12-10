@@ -17,11 +17,11 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="myWishLists"
         options={{
-          title: "Home",
+          title: "My Wishlists",
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="home" color={color} />
+            <FontAwesome5 name="gifts" size={24} color={color} />
           ),
         }}
       />
@@ -35,11 +35,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="myWishLists"
+        name="index"
         options={{
-          title: "My Wishlists",
+          title: "Home",
           tabBarIcon: ({ color }) => (
-            <FontAwesome5 name="gifts" size={24} color={color} />
+            <FontAwesome size={28} name="home" color={color} />
           ),
         }}
       />

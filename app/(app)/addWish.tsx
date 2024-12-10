@@ -11,7 +11,7 @@ import {
   UrlInput,
 } from "@/components/addWish";
 import { addNewWish } from "@/features/wishes/thunks";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -25,6 +25,7 @@ export default function addWish() {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const dispatch = useAppDispatch();
+  const error = useAppSelector((state) => state.wishes.error);
 
   const showToast = (message: string, type: "success" | "error") => {
     Alert.alert(type === "success" ? "Success" : "Error", message);
@@ -53,8 +54,8 @@ export default function addWish() {
     try {
       await dispatch(addNewWish(newWish));
       showToast("Wish added successfully", "success");
-    } catch (error) {
-      showToast("Failed to add wish", "error");
+    } catch (_error) {
+      showToast(`Failed to add wish.\n${error}`, "error");
     }
   };
 
