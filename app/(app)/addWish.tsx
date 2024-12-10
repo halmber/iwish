@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, ScrollView, Alert, SafeAreaView } from "react-native";
+import { ScrollView, Alert } from "react-native";
 import { Button, Text } from "@/components/ui/";
 import {
   GiftDateSelector,
@@ -13,6 +13,7 @@ import {
 import { addNewWish } from "@/features/wishes/thunks";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchLists } from "@/features/lists/thunks";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -77,12 +78,12 @@ export default function addWish() {
   };
 
   return (
-    <View className="flex-1 bg-[#1e1f35] p-6">
-      <SafeAreaView className="my-4">
-        <Text className="text-3xl text-center font-bold">Add new Wish</Text>
-      </SafeAreaView>
-
+    <SafeAreaView className="flex-1 bg-[#1e1f35] px-6">
       <ScrollView className="flex-1">
+        <Text className="text-3xl text-center font-bold mt-4">
+          Add new Wish
+        </Text>
+
         <WishlistPicker
           wishlistId={wishlistId}
           wishlists={wishLists}
@@ -115,6 +116,6 @@ export default function addWish() {
           <Text className="font-bold">Add Wish</Text>
         </Button>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

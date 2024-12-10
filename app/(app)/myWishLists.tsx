@@ -4,11 +4,11 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
-  SafeAreaView,
 } from "react-native";
 import { Text, Card, Button } from "@/components/ui/";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchLists } from "@/features/lists/thunks";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function myWishLists() {
   const dispatch = useAppDispatch();
@@ -42,7 +42,7 @@ export default function myWishLists() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#1e1f35] p-6">
+    <SafeAreaView className="flex-1 bg-[#1e1f35] px-6">
       <ScrollView className="flex-1">
         <Text className="text-3xl text-center font-bold my-4">
           My Wishlists
