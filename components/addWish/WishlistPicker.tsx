@@ -1,11 +1,12 @@
 import { Text } from "@/components/ui/";
+import { List } from "@/features/lists/types";
 import { Picker } from "@react-native-picker/picker";
 import { View } from "react-native";
 
 interface WishlistPickerProps {
   wishlistId: string;
   setWishlistId: (wishlistId: string) => void;
-  wishlists: string[];
+  wishlists: List[];
 }
 
 const WishlistPicker: React.FC<WishlistPickerProps> = ({
@@ -13,6 +14,8 @@ const WishlistPicker: React.FC<WishlistPickerProps> = ({
   setWishlistId,
   wishlists,
 }) => {
+  const createNewObj = { id: null, name: "+ Create new" }; // in future will use for create new list after click
+
   return (
     <View className="mb-4">
       <Text className="text-base font-medium mb-2">Wishlist</Text>
@@ -24,11 +27,11 @@ const WishlistPicker: React.FC<WishlistPickerProps> = ({
         style={{ color: "white", backgroundColor: "#09090b" }}
         dropdownIconColor="white"
       >
-        {wishlists.map((wl) => (
+        {[...wishlists, createNewObj].map((wl) => (
           <Picker.Item
-            key={wl}
-            label={wl}
-            value={wl}
+            key={wl.id}
+            label={wl.name}
+            value={wl.id}
             style={{
               color: "white",
               backgroundColor: "#09090b",
