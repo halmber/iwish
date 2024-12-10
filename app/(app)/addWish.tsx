@@ -27,12 +27,12 @@ export default function addWish() {
 
   const dispatch = useAppDispatch();
   const { error, status } = useAppSelector((state) => state.wishes);
-  const { uid } = useAppSelector((state) => state.auth.user!);
+  const uid = useAppSelector((state) => state.auth.user?.uid);
   const { data: wishLists } = useAppSelector((state) => state.lists);
 
   // fetch wishlists
   useEffect(() => {
-    dispatch(fetchLists(uid));
+    dispatch(fetchLists(uid || ""));
   }, [dispatch]);
 
   // set default wishlist
@@ -64,17 +64,16 @@ export default function addWish() {
       return;
     }
 
-    const newWish = {
+    const wish = {
       title,
       desireLvl,
       price: parseFloat(price),
       currency,
       url,
       description,
-      wishlistId,
       desiredGiftDate,
     };
-    dispatch(addNewWish(newWish));
+    dispatch(addNewWish({ wish, listId: wishlistId, userId: uid || "" }));
   };
 
   return (

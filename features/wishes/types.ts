@@ -1,6 +1,5 @@
 export interface Wish {
   id: string;
-  wishlistId: string;
   title: string;
   desireLvl: number;
   price: number;

@@ -1,12 +1,21 @@
-import { addDataToCollection } from "@/services/firebase/firestore";
+import {
+  addDataToCollection,
+  createListItem,
+} from "@/services/firebase/firestore";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Wish } from "./types";
 
-export const addNewWish = createAsyncThunk(
+interface AddNewWishPayload {
+  wish: Omit<Wish, "id">;
+  listId: string;
+  userId: string;
+}
+
+export const addNewWish = createAsyncThunk<Wish, AddNewWishPayload>(
   "wishes/addNewWish",
-  async (wish: Omit<Wish, "id">, { rejectWithValue }) => {
+  async ({ wish, listId, userId }, { rejectWithValue }) => {
     try {
-      const newWish = await addDataToCollection("wishes", wish);
+      const newWish = await createListItem(userId, listId, wish);
 
       return newWish;
     } catch (error) {

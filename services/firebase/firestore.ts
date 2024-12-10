@@ -87,10 +87,11 @@ export const createListItem = async <T>(
   );
 
   try {
-    await addDoc(itemsCollectionRef, {
+    const docRef = await addDoc(itemsCollectionRef, {
       ...item,
       createdAt: new Date().toISOString(),
     });
+    return { id: docRef.id, ...item };
   } catch (error) {
     throw new Error(`Failed to add item: ${error}`);
   }
