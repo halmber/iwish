@@ -11,6 +11,7 @@ import { setUser } from "./authSlice";
 import { AuthCredentials, RegisterCredentials } from "./types";
 import { AppThunk } from "@/store";
 import { clearUser } from "./authSlice";
+import { createList, createUser } from "@/services/firebase/firestore";
 
 export const monitorAuthState = (): AppThunk<Unsubscribe> => (dispatch) => {
   return onAuthStateChanged(firebaseAuth, (user) => {
@@ -56,16 +57,18 @@ export const registerUser = createAsyncThunk(
         password,
       );
 
-      await updateProfile(user, {
-        displayName: username,
-      });
+      await Promise.all([
+        updateProfile(user, { displayName: username }),
+        createUser(user.uid, username, email),
+        createList(user.uid, "My Wishlist", "wishlist", "private"),
+      ]);
 
       const updatedUser = { ...user };
       updatedUser.displayName = username;
 
       return updatedUser;
     } catch (error) {
-      return rejectWithValue("Failed to create account");
+      return rejectWithValue(`Failed to create account: ${error}`);
     }
   },
 );

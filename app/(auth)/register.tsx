@@ -55,6 +55,7 @@ export default function Register() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          autoCapitalize="none"
         />
 
         <Input
@@ -63,6 +64,7 @@ export default function Register() {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
+          autoCapitalize="none"
         />
 
         <Button
