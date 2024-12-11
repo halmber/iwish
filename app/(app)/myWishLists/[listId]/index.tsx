@@ -1,18 +1,16 @@
 import { useEffect } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import { Text, Button, Card } from "@/components/ui/";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { ScrollView } from "react-native";
+import { Text, Button } from "@/components/ui/";
+import { useLocalSearchParams } from "expo-router";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ChevronLeftIcon, PencilIcon } from "lucide-react-native";
+import { fetchListItems } from "@/features/lists/thunks";
+import { WishlistHeader, WishlistCard } from "@/components/myWishlists/";
+import Loading from "@/components/Loading";
+import Error from "@/components/Error";
 
 export default function WishlistDetails() {
-  const { listId } = useLocalSearchParams();
+  const { listId } = useLocalSearchParams<{ listId: string }>();
   const dispatch = useAppDispatch();
   const currentWishlist = useAppSelector((state) =>
     state.lists.data.find((list) => list.id === listId),
@@ -21,59 +19,31 @@ export default function WishlistDetails() {
 
   useEffect(() => {
     if (listId) {
-      // dispatch(getWishlistItems(listId));
+      dispatch(fetchListItems(listId));
     }
   }, [dispatch, listId]);
 
   if (status === "loading") {
-    return (
-      <View className="flex-1 justify-center items-center bg-[#1e1f35]">
-        <ActivityIndicator size="large" color="#ff6347" />
-        <Text className="mt-4">Loading wishlist details...</Text>
-      </View>
-    );
+    return <Loading message="Loading wishlist details..." />;
   }
 
   if (status === "failed" || !currentWishlist) {
-    return (
-      <View className="flex-1 justify-center items-center bg-[#1e1f35]">
-        <Text className="text-lg">
-          Failed to load wishlist details. Please try again later.
-        </Text>
-      </View>
-    );
+    return <Error message="Failed to fetch wishlist details" />;
   }
 
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35]">
-      <View className="flex-row justify-between items-center px-6 py-4">
-        <TouchableOpacity onPress={() => router.back()}>
-          <ChevronLeftIcon size={24} color="#fff" />
-        </TouchableOpacity>
-
-        <Text className="text-2xl font-bold">{currentWishlist.name}</Text>
-
-        <TouchableOpacity
-          onPress={() => router.push(`/(app)/myWishLists/${listId}/edit`)}
-        >
-          <PencilIcon size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      <WishlistHeader wishlistName={currentWishlist.name} listId={listId} />
 
       <ScrollView className="flex-1 px-6">
-        <Card className="bg-[#27293d] p-4 mb-4">
-          <Text className="text-lg font-bold mb-1">{currentWishlist.name}</Text>
+        <WishlistCard
+          wishlistName={currentWishlist.name}
+          wishlistType={currentWishlist.visibility}
+          wishlistDescription={currentWishlist.description}
+          descriptionTextize="text-lg"
+        />
 
-          <Text className="text-sm font-medium text-gray-400 mb-4">
-            {currentWishlist.type === "public" ? "Public" : "Private"}
-          </Text>
-
-          <Text className="text-lg text-gray-300">
-            {currentWishlist.description || "No description available."}
-          </Text>
-        </Card>
-
-        <Text className="text-xl font-bold mb-4">Wishes</Text>
+        <Text className="text-xl font-bold my-4">Wishes</Text>
 
         <Button
           className="mt-6"

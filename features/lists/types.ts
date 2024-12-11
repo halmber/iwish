@@ -1,3 +1,5 @@
+import { Wish } from "../wishes/types";
+
 export type List = {
   id: string;
   name: string;
@@ -5,4 +7,6 @@ export type List = {
   description: string;
   createdAt: string;
   visibility: "private" | "public";
+
+  items: Wish[];
 };

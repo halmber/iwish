@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import { Text, Input, Button } from "@/components/ui/";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronLeftIcon } from "lucide-react-native";
+import Error from "@/components/Error";
+import Loading from "@/components/Loading";
 
 export default function EditWishlist() {
-  const { listId } = useLocalSearchParams();
+  const { listId } = useLocalSearchParams<{ listId: string }>();
   const dispatch = useAppDispatch();
   const { error, status } = useAppSelector((state) => state.lists);
   const currentWishlist = useAppSelector((state) =>
@@ -47,22 +44,12 @@ export default function EditWishlist() {
   };
 
   if (status === "loading") {
-    return (
-      <View className="flex-1 justify-center items-center bg-[#1e1f35]">
-        <ActivityIndicator size="large" color="#ff6347" />
-        <Text className="mt-4">Loading wishlist details...</Text>
-      </View>
-    );
+    return <Loading message="Loading..." />;
   }
 
   if (status === "failed" || !currentWishlist) {
     return (
-      <View className="flex-1 justify-center items-center bg-[#1e1f35]">
-        <Text className="text-lg">
-          Failed to load wishlist details. Please try again later.lskfa;lsdkflk
-        </Text>
-        <Text className="text-lg text-red-500">Error: {error}</Text>
-      </View>
+      <Error message="Failed to fetch wishlist details" error={error || ""} />
     );
   }
 

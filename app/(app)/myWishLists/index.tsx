@@ -1,15 +1,13 @@
 import { useEffect } from "react";
-import {
-  ScrollView,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import { Text, Card, Button } from "@/components/ui/";
+import { ScrollView, View, TouchableOpacity } from "react-native";
+import { Text, Button } from "@/components/ui/";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchLists } from "@/features/lists/thunks";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import { WishlistCard } from "@/components/myWishlists/";
+import Loading from "@/components/Loading";
+import Error from "@/components/Error";
 
 export default function myWishLists() {
   const dispatch = useAppDispatch();
@@ -24,22 +22,11 @@ export default function myWishLists() {
   }, [dispatch, uid]);
 
   if (status === "loading") {
-    return (
-      <View className="flex-1 justify-center items-center bg-[#1e1f35]">
-        <ActivityIndicator size="large" color="#ff6347" />
-        <Text className="mt-4">Loading lists...</Text>
-      </View>
-    );
+    return <Loading message="Loading wishlists..." />;
   }
 
   if (status === "failed") {
-    return (
-      <View className="flex-1 justify-center items-center bg-[#1e1f35]">
-        <Text className="text-lg">
-          Failed to load lists. Please try again later.
-        </Text>
-      </View>
-    );
+    return <Error message="Failed to fetch wishlists" />;
   }
 
   return (
@@ -56,17 +43,12 @@ export default function myWishLists() {
               className="w-[48%] mb-4"
               onPress={() => router.push(`/(app)/myWishLists/${list.id}`)}
             >
-              <Card className="bg-[#27293d] p-4">
-                <Text className="text-lg font-bold mb-1">{list.name}</Text>
-
-                <Text className="text-sm font-medium text-gray-400 mb-4">
-                  {list.type === "public" ? "Public" : "Private"}
-                </Text>
-
-                <Text className="text-sm text-gray-300">
-                  {list.description || "No description available."}
-                </Text>
-              </Card>
+              <WishlistCard
+                wishlistName={list.name}
+                wishlistType={list.visibility}
+                wishlistDescription={list.description}
+                descriptionTextize="text-sm"
+              />
             </TouchableOpacity>
           ))}
         </View>

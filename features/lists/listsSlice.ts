@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { List } from "./types";
-import { fetchLists } from "./thunks";
+import { fetchListItems, fetchLists } from "./thunks";
 
 type ListsState = {
   data: List[];
@@ -31,6 +31,22 @@ const listsSlice = createSlice({
       .addCase(fetchLists.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to fetch lists";
+      })
+      // fetch list items
+      .addCase(fetchListItems.pending, (state, action) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchListItems.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.data.findIndex(
+          (list) => list.id === action.meta.arg,
+        );
+        state.data[index].items = action.payload.wihes;
+      })
+      .addCase(fetchListItems.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to fetch list items";
       });
   },
 });
