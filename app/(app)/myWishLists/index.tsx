@@ -9,6 +9,7 @@ import { Text, Card, Button } from "@/components/ui/";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchLists } from "@/features/lists/thunks";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
 export default function myWishLists() {
   const dispatch = useAppDispatch();
@@ -53,7 +54,7 @@ export default function myWishLists() {
             <TouchableOpacity
               key={list.id}
               className="w-[48%] mb-4"
-              // onPress={() => router.replace("/(app)/wishes")}
+              onPress={() => router.push(`/(app)/myWishLists/${list.id}`)}
             >
               <Card className="bg-[#27293d] p-4">
                 <Text className="text-lg font-bold mb-1">{list.name}</Text>
@@ -70,10 +71,7 @@ export default function myWishLists() {
           ))}
         </View>
 
-        <Button
-          className="mt-6"
-          // onPress={() => router.replace("createList")}
-        >
+        <Button className="mt-6">
           <Text className="font-bold">Create New List</Text>
         </Button>
       </ScrollView>

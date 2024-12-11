@@ -6,6 +6,7 @@ import { Tabs } from "expo-router";
 export default function TabLayout() {
   return (
     <Tabs
+      backBehavior="history"
       screenOptions={{
         tabBarActiveTintColor: "#ff6347",
         headerShown: false,

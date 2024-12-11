@@ -4,4 +4,5 @@ export type List = {
   type: string;
   description: string;
   createdAt: string;
+  visibility: "private" | "public";
 };
