@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { ScrollView } from "react-native";
-import { Text, Button } from "@/components/ui/";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import { Text, Button, Card } from "@/components/ui/";
 import { useLocalSearchParams } from "expo-router";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,6 +8,7 @@ import { fetchListItems } from "@/features/lists/thunks";
 import { WishlistHeader, WishlistCard } from "@/components/myWishlists/";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
+import { DesireLevelSelector } from "@/components/addWish";
 
 export default function WishlistDetails() {
   const { listId } = useLocalSearchParams<{ listId: string }>();
@@ -43,7 +44,28 @@ export default function WishlistDetails() {
           descriptionTextize="text-lg"
         />
 
-        <Text className="text-xl font-bold my-4">Wishes</Text>
+        <View className="my-4">
+          <Text className="text-xl font-bold my-4">Wishes</Text>
+
+          {currentWishlist.items.length !== 0 ? (
+            currentWishlist.items.map((wish) => (
+              <TouchableOpacity key={wish.id} onPress={() => {}}>
+                <Card key={wish.id} className="bg-[#27293d] p-4 mb-4">
+                  <Text className="text-xl font-bold mb-2">{wish.title}</Text>
+                  <Text className="text-sm text-gray-300 mb-2">
+                    {wish.description || "No description available."}
+                  </Text>
+                  <Text className="text-sm font-bold mb-2">
+                    {wish.price} {wish.currency}
+                  </Text>
+                  <DesireLevelSelector desireLvl={wish.desireLvl} />
+                </Card>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text className="text-lg text-gray-400">No wishes added yet.</Text>
+          )}
+        </View>
 
         <Button
           className="mt-6"

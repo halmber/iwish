@@ -1,6 +1,7 @@
 import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "./config";
 import { List } from "@/features/lists/types";
+import { Wish } from "@/features/wishes/types";
 
 export const addDataToCollection = async <T>(
   collectionName: string,
@@ -107,6 +108,7 @@ export const getUserLists = async (userId: string) => {
   const listsSnapshot = await getDocs(listsCollectionRef);
   const lists = listsSnapshot.docs.map((doc) => ({
     id: doc.id,
+    items: [] as Wish[],
     ...doc.data(),
   })) as List[];
   return lists;

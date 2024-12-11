@@ -4,7 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface DesireLevelSelectorProps {
   desireLvl: number;
-  setDesireLvl: (desireLvl: number) => void;
+  setDesireLvl?: (desireLvl: number) => void;
 }
 
 const DesireLevelSelector: React.FC<DesireLevelSelectorProps> = ({
@@ -18,7 +18,10 @@ const DesireLevelSelector: React.FC<DesireLevelSelectorProps> = ({
       <Text className="text-base font-medium mb-2">Desire Level</Text>
       <View className="flex-row gap-2">
         {desireLvls.map((level) => (
-          <TouchableOpacity key={level} onPress={() => setDesireLvl(level)}>
+          <TouchableOpacity
+            key={level}
+            onPress={() => setDesireLvl && setDesireLvl(level)}
+          >
             <FontAwesome
               name="heart"
               size={20}
