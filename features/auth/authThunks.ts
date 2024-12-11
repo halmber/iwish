@@ -7,11 +7,11 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { firebaseAuth } from "@/services/firebase/config";
-import { setUser } from "./authSlice";
 import { AuthCredentials, RegisterCredentials } from "./types";
 import { AppThunk } from "@/store";
-import { clearUser } from "./authSlice";
 import { createList, createUser } from "@/services/firebase/firestore";
+import { setUser } from "./authActions";
+import { clearUser } from "./authActions";
 
 export const monitorAuthState = (): AppThunk<Unsubscribe> => (dispatch) => {
   return onAuthStateChanged(firebaseAuth, (user) => {

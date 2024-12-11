@@ -2,9 +2,9 @@ import { View } from "react-native";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { firebaseAuth } from "@/services/firebase/config";
-import { clearUser } from "@/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { Button, Text } from "@/components/ui";
+import { clearUser } from "@/features/auth/authActions";
 
 export default function Home() {
   const dispatch = useAppDispatch();

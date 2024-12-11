@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "firebase/auth";
 import { loginUser, registerUser } from "./authThunks";
+import { setUser } from "./authActions";
+import { clearUser } from "./authActions";
 
 interface AuthState {
   user: User | null;
@@ -19,19 +21,19 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
-      state.isAuthenticated = true;
-    },
-    clearUser: (state) => {
-      state.user = null;
-      state.isAuthenticated = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    // Login cases
     builder
+      // Set and clear user actions
+      .addCase(setUser, (state, action) => {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(clearUser, (state) => {
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      // Login cases
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -64,5 +66,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser, clearUser } = authSlice.actions;
+// export const { setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;
