@@ -11,7 +11,7 @@ import Error from "@/components/Error";
 
 export default function myWishLists() {
   const dispatch = useAppDispatch();
-  const { uid } = useAppSelector((state) => state.auth.user!);
+  const uid = useAppSelector((state) => state.auth.user?.uid);
   const { data: wishLists, status } = useAppSelector((state) => state.lists);
 
   // Fetch lists on mount
