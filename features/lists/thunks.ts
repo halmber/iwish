@@ -1,5 +1,6 @@
 import {
   createList,
+  deleteList,
   getListItems,
   getUserLists,
 } from "@/services/firebase/firestore";
@@ -45,5 +46,19 @@ export const createWishlist = createAsyncThunk<
     );
 
     return newWishlist;
+  },
+);
+
+export const deleteWishlist = createAsyncThunk<void, string>(
+  "lists/deleteWishlist",
+  async (listId, { getState }) => {
+    const state = getState() as RootState;
+    const userId = state.auth.user?.uid || "";
+
+    if (state.lists.data.length === 1) {
+      throw new Error("Cannot delete last list. There must be at least one.");
+    }
+
+    await deleteList(userId, listId);
   },
 );

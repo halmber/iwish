@@ -9,6 +9,7 @@ import { WishlistCard } from "@/components/myWishlists/";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { resetStatus } from "@/features/lists/listsSlice";
+import OverlayLoading from "@/components/OverlayLoading";
 
 export default function myWishLists() {
   const dispatch = useAppDispatch();
@@ -22,16 +23,16 @@ export default function myWishLists() {
     }
   }, [dispatch, uid]);
 
-  if (status === "loading") {
-    return <Loading message="Loading wishlists..." />;
-  }
-
   if (status === "failed") {
     return <Error message="Failed to fetch wishlists" />;
   }
 
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35] px-6">
+      {status === "loading" && (
+        <OverlayLoading message="Loading wishlists..." />
+      )}
+
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <Text className="text-3xl text-center font-bold my-4">
           My Wishlists

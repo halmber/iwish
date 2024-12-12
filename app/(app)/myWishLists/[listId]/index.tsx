@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Text, Button, Card } from "@/components/ui/";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { fetchListItems } from "@/features/lists/thunks";
+import { deleteWishlist, fetchListItems } from "@/features/lists/thunks";
 import { WishlistHeader, WishlistCard } from "@/components/myWishlists/";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { DesireLevelSelector } from "@/components/addWish";
+import OverlayLoading from "@/components/OverlayLoading";
 
 export default function WishlistDetails() {
   const { listId } = useLocalSearchParams<{ listId: string }>();
@@ -16,7 +17,7 @@ export default function WishlistDetails() {
   const currentWishlist = useAppSelector((state) =>
     state.lists.data.find((list) => list.id === listId),
   );
-  const { status } = useAppSelector((state) => state.lists);
+  const { status, error } = useAppSelector((state) => state.lists);
 
   useEffect(() => {
     if (listId) {
@@ -24,22 +25,24 @@ export default function WishlistDetails() {
     }
   }, [dispatch, listId]);
 
-  if (status === "loading") {
-    return <Loading message="Loading wishlist details..." />;
-  }
+  useEffect(() => {
+    if (!currentWishlist && status === "succeeded") {
+      router.replace("/(app)/myWishLists");
+    }
+  }, [status, currentWishlist]);
 
   if (status === "failed" || !currentWishlist) {
-    return <Error message="Failed to fetch wishlist details" />;
+    return <Error message={error || ""} error={error || ""} />;
   }
 
   const handleDelete = () => {
-    //   console.log(`Deleted wishlist with ID: ${listId}`);
-    //   setModalVisible(!isModalVisible);
-    // };
+    dispatch(deleteWishlist(listId));
   };
 
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35]">
+      {status === "loading" && <OverlayLoading message="Loading..." />}
+
       <WishlistHeader
         wishlistName={currentWishlist.name}
         listId={listId}

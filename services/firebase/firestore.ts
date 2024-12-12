@@ -1,4 +1,11 @@
-import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "./config";
 import { List } from "@/features/lists/types";
 import { Wish } from "@/features/wishes/types";
@@ -103,6 +110,34 @@ export const createListItem = async <T>(
     throw new Error(`Failed to add item: ${error}`);
   }
 };
+
+/**
+ * Deletes a list and its associated items for a specific user.
+ * @todo Degug and Optimize as nedded. See https://firebase.google.com/docs/firestore/manage-data/delete-data
+ * @param userId - The ID of the user.
+ * @param listId - The ID of the list to delete.
+ */
+export async function deleteList(userId: string, listId: string) {
+  const listDocRef = doc(db, `users/${userId}/lists/${listId}`);
+  const itemsCollectionRef = collection(
+    db,
+    `users/${userId}/lists/${listId}/items`,
+  );
+
+  try {
+    // Delete all items in the list
+    const itemsSnapshot = await getDocs(itemsCollectionRef);
+    const itemDeletePromises = itemsSnapshot.docs.map((itemDoc) =>
+      deleteDoc(itemDoc.ref),
+    );
+    await Promise.all(itemDeletePromises);
+
+    // Delete the list itself
+    await deleteDoc(listDocRef);
+  } catch (error) {
+    throw new Error(`Failed to delete the list. ${error}`);
+  }
+}
 
 /**
  * Fetches all lists of a specific user.

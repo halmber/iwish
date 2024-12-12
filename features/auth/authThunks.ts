@@ -60,7 +60,13 @@ export const registerUser = createAsyncThunk(
       await Promise.all([
         updateProfile(user, { displayName: username }),
         createUser(user.uid, username, email),
-        createList(user.uid, "My Wishlist", "wishlist", "private"),
+        createList(
+          user.uid,
+          "My Wishlist",
+          "wishlist",
+          "private",
+          "My own wishes",
+        ),
       ]);
 
       const updatedUser = { ...user };

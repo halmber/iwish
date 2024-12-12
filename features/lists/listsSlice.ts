@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { List } from "./types";
-import { createWishlist, fetchListItems, fetchLists } from "./thunks";
+import { createWishlist, deleteWishlist, fetchListItems, fetchLists } from "./thunks";
 
 type ListsState = {
   data: List[];
@@ -64,7 +64,22 @@ const listsSlice = createSlice({
       .addCase(createWishlist.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to create wishlist";
-      });
+      })
+      // delete list
+      .addCase(deleteWishlist.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(deleteWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = state.data.filter(
+          (list) => list.id !== action.meta.arg,
+        );
+      })
+      .addCase(deleteWishlist.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to delete wishlist";
+      })
   },
 });
 
