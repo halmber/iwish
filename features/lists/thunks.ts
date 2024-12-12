@@ -1,4 +1,8 @@
-import { getListItems, getUserLists } from "@/services/firebase/firestore";
+import {
+  createList,
+  getListItems,
+  getUserLists,
+} from "@/services/firebase/firestore";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { List } from "./types";
 import { RootState } from "@/store";
@@ -22,3 +26,24 @@ export const fetchListItems = createAsyncThunk<
 
   return { wihes, listId };
 });
+
+export const createWishlist = createAsyncThunk<
+  List,
+  Omit<List, "id" | "items" | "createdAt">
+>(
+  "lists/createWishlist",
+  async ({ name, visibility, description, type }, { getState }) => {
+    const state = getState() as RootState;
+
+    const userId = state.auth.user?.uid || "";
+    const newWishlist = await createList(
+      userId,
+      name,
+      type,
+      visibility,
+      description,
+    );
+
+    return newWishlist;
+  },
+);

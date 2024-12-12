@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { List } from "./types";
-import { fetchListItems, fetchLists } from "./thunks";
+import { createWishlist, fetchListItems, fetchLists } from "./thunks";
 
 type ListsState = {
   data: List[];
@@ -17,7 +17,11 @@ const initialState: ListsState = {
 const listsSlice = createSlice({
   name: "lists",
   initialState,
-  reducers: {},
+  reducers: {
+    resetStatus: (state) => {
+      state.status = "idle";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLists.pending, (state) => {
@@ -47,8 +51,22 @@ const listsSlice = createSlice({
       .addCase(fetchListItems.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to fetch list items";
+      })
+      // create list
+      .addCase(createWishlist.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(createWishlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data.push(action.payload);
+      })
+      .addCase(createWishlist.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to create wishlist";
       });
   },
 });
 
+export const { resetStatus } = listsSlice.actions;
 export default listsSlice.reducer;

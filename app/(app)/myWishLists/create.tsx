@@ -1,66 +1,55 @@
-import { useState, useEffect } from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { router } from "expo-router";
 import { Text, Input, Button } from "@/components/ui/";
-import { router, useLocalSearchParams } from "expo-router";
-import { useAppSelector, useAppDispatch } from "@/store";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import { ChevronLeftIcon } from "lucide-react-native";
 import Error from "@/components/Error";
-import Loading from "@/components/Loading";
+import { createWishlist } from "@/features/lists/thunks";
+import { resetStatus } from "@/features/lists/listsSlice";
+import OverlayLoading from "@/components/OverlayLoading";
 
-export default function EditWishlist() {
-  const { listId } = useLocalSearchParams<{ listId: string }>();
+export default function CreateWishlist() {
   const dispatch = useAppDispatch();
   const { error, status } = useAppSelector((state) => state.lists);
-  const currentWishlist = useAppSelector((state) =>
-    state.lists.data.find((list) => list.id === listId),
-  );
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [visibility, setVisibility] = useState<"private" | "public">("private");
 
   useEffect(() => {
-    if (listId) {
-      // dispatch(getWishlistItems(listId));
+    if (status === "succeeded") {
+      dispatch(resetStatus());
+      router.replace("/(app)/myWishLists");
+    } else if (status === "failed") {
+      dispatch(resetStatus());
     }
-  }, [dispatch, listId]);
+  }, [status]);
 
-  useEffect(() => {
-    if (currentWishlist) {
-      setName(currentWishlist.name);
-      setDescription(currentWishlist.description || "");
-      setVisibility(currentWishlist.visibility);
-    }
-  }, [currentWishlist]);
-
-  const handleSubmit = async () => {
-    if (listId) {
-      // await dispatch(
-      //   updateWishlist({ id: listId as string, name, description }),
-      // );
-      router.back();
-    }
+  const handleCreate = () => {
+    dispatch(
+      createWishlist({ name, description, visibility, type: "wishlist" }),
+    );
   };
 
-  if (status === "loading") {
-    return <Loading message="Loading..." />;
-  }
-
-  if (status === "failed" || !currentWishlist) {
-    return (
-      <Error message="Failed to fetch wishlist details" error={error || ""} />
-    );
+  if (status === "failed") {
+    return <Error message="Failed to create wishlist." error={error || ""} />;
   }
 
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35]">
+      {status === "loading" && (
+        <OverlayLoading message="Creating wishlist..." />
+      )}
+
       <View className="flex-row items-center px-6 py-4">
         <TouchableOpacity onPress={() => router.back()}>
           <ChevronLeftIcon size={24} color="#fff" />
         </TouchableOpacity>
         <Text className="text-2xl font-bold text-white ml-4">
-          Edit wishlist info
+          Create a new wishlist
         </Text>
       </View>
 
@@ -104,8 +93,8 @@ export default function EditWishlist() {
           </View>
         </View>
 
-        <Button className="mt-6" onPress={handleSubmit}>
-          <Text className="font-bold">Save Changes</Text>
+        <Button className="mt-6" onPress={handleCreate}>
+          <Text className="font-bold">Create wishlist</Text>
         </Button>
       </ScrollView>
     </SafeAreaView>

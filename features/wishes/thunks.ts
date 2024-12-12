@@ -1,7 +1,4 @@
-import {
-  addDataToCollection,
-  createListItem,
-} from "@/services/firebase/firestore";
+import { createListItem } from "@/services/firebase/firestore";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Wish } from "./types";
 

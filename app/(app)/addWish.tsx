@@ -14,6 +14,7 @@ import { addNewWish } from "@/features/wishes/thunks";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchLists } from "@/features/lists/thunks";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { resetStatus } from "@/features/lists/listsSlice";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -49,6 +50,7 @@ export default function addWish() {
       showToast(`Failed to add wish.\n${error}`, "error");
     } else if (status === "succeeded") {
       showToast("Wish added successfully", "success");
+      dispatch(resetStatus());
     }
   }, [status]);
 

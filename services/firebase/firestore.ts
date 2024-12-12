@@ -58,15 +58,20 @@ export const createList = async (
   name: string,
   type: "wishlist" | "watchlist",
   visibility: "private" | "public",
+  description: string,
 ) => {
   const listsCollectionRef = collection(db, `users/${userId}/lists`);
   try {
-    await addDoc(listsCollectionRef, {
+    const newListData = {
       name,
       type,
       visibility,
+      description,
       createdAt: new Date().toISOString(),
-    });
+    };
+    const docRef = await addDoc(listsCollectionRef, newListData);
+
+    return { id: docRef.id, items: [] as Wish[], ...newListData };
   } catch (error) {
     throw new Error(`Failed to add list: ${error}`);
   }

@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { WishlistCard } from "@/components/myWishlists/";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
+import { resetStatus } from "@/features/lists/listsSlice";
 
 export default function myWishLists() {
   const dispatch = useAppDispatch();
@@ -31,7 +32,7 @@ export default function myWishLists() {
 
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35] px-6">
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <Text className="text-3xl text-center font-bold my-4">
           My Wishlists
         </Text>
@@ -53,7 +54,13 @@ export default function myWishLists() {
           ))}
         </View>
 
-        <Button className="mt-6">
+        <Button
+          className="my-6"
+          onPress={() => {
+            dispatch(resetStatus());
+            router.push("/(app)/myWishLists/create");
+          }}
+        >
           <Text className="font-bold">Create New List</Text>
         </Button>
       </ScrollView>
