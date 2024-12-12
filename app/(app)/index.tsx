@@ -5,6 +5,7 @@ import { firebaseAuth } from "@/services/firebase/config";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { Button, Text } from "@/components/ui";
 import { clearUser } from "@/features/auth/authActions";
+import { Link } from "lucide-react-native";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -24,9 +25,14 @@ export default function Home() {
           {user?.displayName}
         </Text>
 
-        <Button className="w-full" onPress={handleLogout}>
-          <Text>Sign Out </Text>
-        </Button>
+        <View className="w-full mb-4 flex-row justify-between">
+          <Button onPress={() => router.push("/_sitemap")}>
+            <Text>View sitemap</Text>
+          </Button>
+          <Button variant={"destructive"} onPress={handleLogout}>
+            <Text>Sign Out </Text>
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
