@@ -32,9 +32,19 @@ export default function WishlistDetails() {
     return <Error message="Failed to fetch wishlist details" />;
   }
 
+  const handleDelete = () => {
+    //   console.log(`Deleted wishlist with ID: ${listId}`);
+    //   setModalVisible(!isModalVisible);
+    // };
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35]">
-      <WishlistHeader wishlistName={currentWishlist.name} listId={listId} />
+      <WishlistHeader
+        wishlistName={currentWishlist.name}
+        listId={listId}
+        handleDelete={handleDelete}
+      />
 
       <ScrollView className="flex-1 px-6">
         <WishlistCard
