@@ -15,6 +15,8 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchLists } from "@/features/lists/thunks";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { resetStatus } from "@/features/lists/listsSlice";
+import OverlayLoading from "@/components/OverlayLoading";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -26,6 +28,8 @@ export default function addWish() {
   const [wishlistId, setWishlistId] = useState("");
   const [desiredGiftDate, setDesiredGiftDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const dispatch = useAppDispatch();
   const { error, status } = useAppSelector((state) => state.wishes);
@@ -49,7 +53,7 @@ export default function addWish() {
     if (status === "failed") {
       showToast(`Failed to add wish.\n${error}`, "error");
     } else if (status === "succeeded") {
-      showToast("Wish added successfully", "success");
+      setIsModalVisible(true);
       dispatch(resetStatus());
     }
   }, [status]);
@@ -77,10 +81,18 @@ export default function addWish() {
       desiredGiftDate,
     };
     dispatch(addNewWish({ wish, listId: wishlistId, userId: uid || "" }));
+    setTitle("");
+    setDesireLvl(1);
+    setPrice("");
+    setCurrency("UAH");
+    setUrl("");
+    setDescription("");
   };
 
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35] px-6">
+      {status === "loading" && <OverlayLoading message="Adding wish..." />}
+
       <ScrollView className="flex-1">
         <Text className="text-3xl text-center font-bold mt-4">
           Add new Wish
@@ -112,6 +124,14 @@ export default function addWish() {
           setDesiredGiftDate={setDesiredGiftDate}
           showDatePicker={showDatePicker}
           setShowDatePicker={setShowDatePicker}
+        />
+
+        <ConfirmationModal
+          visible={isModalVisible}
+          message={"Wish added successfully"}
+          title={"Success"}
+          onConfirm={() => setIsModalVisible(false)}
+          onClose={() => setIsModalVisible(false)}
         />
 
         <Button onPress={handleSubmit}>
