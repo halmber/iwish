@@ -7,14 +7,21 @@ interface WishlistPickerProps {
   wishlistId: string;
   setWishlistId: (wishlistId: string) => void;
   wishlists: List[];
+  handleCreateNewList: () => void;
 }
 
 const WishlistPicker: React.FC<WishlistPickerProps> = ({
   wishlistId,
   setWishlistId,
   wishlists,
+  handleCreateNewList,
 }) => {
   const createNewObj = { id: null, name: "+ Create new" }; // in future will use for create new list after click
+  const handleChange = (itemValue: string) => {
+    if (itemValue === null) handleCreateNewList();
+
+    setWishlistId(itemValue);
+  };
 
   return (
     <View className="mb-4">
@@ -22,7 +29,7 @@ const WishlistPicker: React.FC<WishlistPickerProps> = ({
       <Picker
         itemStyle={{ color: "white", backgroundColor: "#09090b" }}
         selectedValue={wishlistId}
-        onValueChange={(itemValue) => setWishlistId(itemValue)}
+        onValueChange={handleChange}
         mode="dropdown"
         style={{ color: "white", backgroundColor: "#09090b" }}
         dropdownIconColor="white"

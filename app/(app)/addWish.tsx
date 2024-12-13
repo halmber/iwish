@@ -17,6 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { resetStatus } from "@/features/lists/listsSlice";
 import OverlayLoading from "@/components/OverlayLoading";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import { router } from "expo-router";
 
 export default function addWish() {
   const [title, setTitle] = useState("");
@@ -25,7 +26,7 @@ export default function addWish() {
   const [currency, setCurrency] = useState("UAH");
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
-  const [wishlistId, setWishlistId] = useState("");
+  const [wishlistId, setWishlistId] = useState<string | null>("");
   const [desiredGiftDate, setDesiredGiftDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -80,13 +81,18 @@ export default function addWish() {
       description,
       desiredGiftDate,
     };
-    dispatch(addNewWish({ wish, listId: wishlistId, userId: uid || "" }));
+    dispatch(addNewWish({ wish, listId: wishlistId || "", userId: uid || "" }));
     setTitle("");
     setDesireLvl(1);
     setPrice("");
     setCurrency("UAH");
     setUrl("");
     setDescription("");
+  };
+
+  const handleCreateNewList = () => {
+    dispatch(resetStatus());
+    router.push("/(app)/myWishLists/create");
   };
 
   return (
@@ -99,9 +105,10 @@ export default function addWish() {
         </Text>
 
         <WishlistPicker
-          wishlistId={wishlistId}
+          wishlistId={wishlistId || ""}
           wishlists={wishLists}
           setWishlistId={setWishlistId}
+          handleCreateNewList={handleCreateNewList}
         />
         <TitleInput title={title} setTitle={setTitle} />
         <DesireLevelSelector
