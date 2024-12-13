@@ -6,7 +6,6 @@ import { useAppSelector, useAppDispatch } from "@/store";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { deleteWishlist, fetchListItems } from "@/features/lists/thunks";
 import { WishlistHeader, WishlistCard } from "@/components/myWishlists/";
-import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { DesireLevelSelector } from "@/components/addWish";
 import OverlayLoading from "@/components/OverlayLoading";
@@ -57,8 +56,15 @@ export default function WishlistDetails() {
           descriptionTextize="text-lg"
         />
 
-        <View className="my-4">
-          <Text className="text-xl font-bold my-4">Wishes</Text>
+        <View className="my-6">
+          <Text className="text-xl font-bold">Wishes</Text>
+
+          <Button
+            className="my-4"
+            onPress={() => router.push(`/(app)/addWish?listId=${listId}`)} // temporary :) solution
+          >
+            <Text className="font-bold">Add New Wish</Text>
+          </Button>
 
           {currentWishlist.items.length !== 0 ? (
             currentWishlist.items.map((wish) => (
@@ -79,13 +85,6 @@ export default function WishlistDetails() {
             <Text className="text-lg text-gray-400">No wishes added yet.</Text>
           )}
         </View>
-
-        <Button
-          className="mt-6"
-          onPress={() => router.push(`/(app)/addWish?listId=${listId}`)} // temporary :) solution
-        >
-          <Text className="font-bold">Add New Wish</Text>
-        </Button>
       </ScrollView>
     </SafeAreaView>
   );
