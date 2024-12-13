@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Text, Button, Card } from "@/components/ui/";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAppSelector, useAppDispatch } from "@/store";
@@ -19,9 +24,7 @@ export default function WishlistDetails() {
   const { status, error } = useAppSelector((state) => state.lists);
 
   useEffect(() => {
-    if (listId) {
-      dispatch(fetchListItems(listId));
-    }
+    dispatch(fetchListItems(listId));
   }, [dispatch, listId]);
 
   useEffect(() => {
@@ -48,7 +51,17 @@ export default function WishlistDetails() {
         handleDelete={handleDelete}
       />
 
-      <ScrollView className="flex-1 px-6">
+      <ScrollView
+        className="flex-1 px-6"
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => dispatch(fetchListItems(listId))}
+            refreshing={
+              status === "loading" && currentWishlist.items.length !== 0 // when items exist in store, dont do fetch, so there will be no icon
+            }
+          />
+        }
+      >
         <WishlistCard
           wishlistName={currentWishlist.name}
           wishlistType={currentWishlist.visibility}
