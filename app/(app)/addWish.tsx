@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Alert } from "react-native";
+import { ScrollView, Alert, View, TouchableOpacity } from "react-native";
 import { Button, Text } from "@/components/ui/";
 import {
   GiftDateSelector,
@@ -19,6 +19,7 @@ import OverlayLoading from "@/components/OverlayLoading";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
+import { Trash2 } from "lucide-react-native";
 
 export default function addWish() {
   const { listId } = useLocalSearchParams<{ listId?: string }>(); // implement temporary :) solution
@@ -92,12 +93,17 @@ export default function addWish() {
       desiredGiftDate,
     };
     dispatch(addNewWish({ wish, listId: wishlistId || "", userId: uid || "" }));
+    clearForm();
+  };
+
+  const clearForm = () => {
     setTitle("");
     setDesireLvl(1);
     setPrice("");
     setCurrency("UAH");
     setUrl("");
     setDescription("");
+    setDesiredGiftDate(new Date());
   };
 
   const handleCreateNewList = () => {
@@ -110,9 +116,14 @@ export default function addWish() {
       {status === "loading" && <OverlayLoading message="Adding wish..." />}
 
       <ScrollView className="flex-1">
-        <Text className="text-3xl text-center font-bold mt-4">
-          Add new Wish
-        </Text>
+        <View className="w-full flex  flex-row items-center justify-end mt-4">
+          <Text className="text-3xl text-center font-bold absolute left-1/2 -translate-x-1/2">
+            Add new Wish
+          </Text>
+          <TouchableOpacity onPress={() => clearForm()}>
+            <Trash2 size={24} color="white" />
+          </TouchableOpacity>
+        </View>
 
         <WishlistPicker
           wishlistId={wishlistId || ""}
