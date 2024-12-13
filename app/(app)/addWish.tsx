@@ -18,15 +18,18 @@ import { resetStatus } from "@/features/lists/listsSlice";
 import OverlayLoading from "@/components/OverlayLoading";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 export default function addWish() {
+  const { listId } = useLocalSearchParams<{ listId?: string }>(); // implement temporary :) solution
+
   const [title, setTitle] = useState("");
   const [desireLvl, setDesireLvl] = useState(1);
   const [price, setPrice] = useState("");
   const [currency, setCurrency] = useState("UAH");
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
-  const [wishlistId, setWishlistId] = useState<string | null>("");
+  const [wishlistId, setWishlistId] = useState<string | null>(listId || "");
   const [desiredGiftDate, setDesiredGiftDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -48,6 +51,13 @@ export default function addWish() {
       setWishlistId(wishLists[0].id);
     }
   }, [wishLists, wishlistId]);
+
+  // set wishlistId when listId is available
+  useEffect(() => {
+    if (listId) {
+      setWishlistId(listId);
+    }
+  }, [listId]);
 
   // show status toast
   useEffect(() => {

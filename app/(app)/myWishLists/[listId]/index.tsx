@@ -82,7 +82,7 @@ export default function WishlistDetails() {
 
         <Button
           className="mt-6"
-          // onPress={() => router.push(`/(app)/addWish/${listId}`)}
+          onPress={() => router.push(`/(app)/addWish?listId=${listId}`)} // temporary :) solution
         >
           <Text className="font-bold">Add New Wish</Text>
         </Button>
