@@ -3,6 +3,7 @@ import {
   deleteList,
   getListItems,
   getUserLists,
+  updateList,
 } from "@/services/firebase/firestore";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { List } from "./types";
@@ -60,5 +61,27 @@ export const deleteWishlist = createAsyncThunk<void, string>(
     }
 
     await deleteList(userId, listId);
+  },
+);
+
+export const updateWishlist = createAsyncThunk(
+  "lists/updateList",
+  async (
+    args: {
+      listId: string;
+      updatedData: Partial<{
+        name: string;
+        visibility: "private" | "public";
+        description: string;
+      }>;
+    },
+    { getState },
+  ) => {
+    const state = getState() as RootState;
+    const userId = state.auth.user?.uid || "";
+    const { listId, updatedData } = args;
+
+    const updatedList = await updateList(userId, listId, updatedData);
+    return updatedList;
   },
 );

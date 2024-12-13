@@ -5,6 +5,7 @@ import {
   doc,
   getDocs,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "./config";
 import { List } from "@/features/lists/types";
@@ -81,6 +82,36 @@ export const createList = async (
     return { id: docRef.id, items: [] as Wish[], ...newListData };
   } catch (error) {
     throw new Error(`Failed to add list: ${error}`);
+  }
+};
+
+/**
+ * Updates the data of a specific list for a given user.
+ *
+ * @param userId - The ID of the user the list belongs to.
+ * @param listId - The ID of the list to update.
+ * @param updatedData - An object containing the fields to update.
+ * @returns The updated list data.
+ */
+export const updateList = async (
+  userId: string,
+  listId: string,
+  updatedData: Partial<{
+    name: string;
+    visibility: "private" | "public";
+    description: string;
+  }>,
+) => {
+  const listDocRef = doc(db, `users/${userId}/lists/${listId}`);
+
+  try {
+    await updateDoc(listDocRef, {
+      ...updatedData,
+    });
+
+    return { id: listId, ...updatedData };
+  } catch (error) {
+    throw new Error(`Failed to update the list: ${error}`);
   }
 };
 

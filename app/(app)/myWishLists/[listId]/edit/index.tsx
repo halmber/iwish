@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronLeftIcon } from "lucide-react-native";
 import Error from "@/components/Error";
 import Loading from "@/components/Loading";
+import { updateWishlist } from "@/features/lists/thunks";
 
 export default function EditWishlist() {
   const { listId } = useLocalSearchParams<{ listId: string }>();
@@ -21,12 +22,6 @@ export default function EditWishlist() {
   const [visibility, setVisibility] = useState<"private" | "public">("private");
 
   useEffect(() => {
-    if (listId) {
-      // dispatch(getWishlistItems(listId));
-    }
-  }, [dispatch, listId]);
-
-  useEffect(() => {
     if (currentWishlist) {
       setName(currentWishlist.name);
       setDescription(currentWishlist.description || "");
@@ -34,11 +29,14 @@ export default function EditWishlist() {
     }
   }, [currentWishlist]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (listId) {
-      // await dispatch(
-      //   updateWishlist({ id: listId as string, name, description }),
-      // );
+      dispatch(
+        updateWishlist({
+          listId,
+          updatedData: { name, description, visibility },
+        }),
+      );
       router.back();
     }
   };
