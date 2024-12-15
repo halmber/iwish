@@ -6,5 +6,5 @@ export interface Wish {
   currency: string;
   url: string;
   description: string;
-  desiredGiftDate: Date;
+  desiredGiftDate: string;
 }

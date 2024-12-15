@@ -41,10 +41,6 @@ export default function Wish() {
     }
   };
 
-  const formatGiftDate = (date: { seconds: number }) => {
-    return new Date(date.seconds * 1000).toLocaleDateString();
-  };
-
   const shortenURL = (url: string, maxLength = 30) => {
     if (url.length <= maxLength) return url;
     const domain = new URL(url).hostname;
@@ -106,9 +102,9 @@ export default function Wish() {
             />
             <InfoRow
               label="Desired Gift Date"
-              value={formatGiftDate(
-                wish.desiredGiftDate as any as { seconds: number }, // TODO: remove any. firebase value is obj with seconds, not Date
-              )}
+              value={
+                new Date(wish.desiredGiftDate).toLocaleDateString() || "N/A"
+              }
             />
             <View className="pb-3">
               <Text className="text-lg text-gray-400 font-semibold mb-2">

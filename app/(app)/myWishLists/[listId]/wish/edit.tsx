@@ -36,7 +36,7 @@ export default function EditWish() {
     currency: wish?.currency || "UAH",
     url: wish?.url || "",
     description: wish?.description || "",
-    desiredGiftDate: wish?.desiredGiftDate || new Date(),
+    desiredGiftDate: new Date(wish?.desiredGiftDate || ""),
   });
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -55,7 +55,10 @@ export default function EditWish() {
       updateWishThunk({
         wishId: wishId,
         listId: listId,
-        updatedData: formData,
+        updatedData: {
+          ...formData,
+          desiredGiftDate: formData.desiredGiftDate.toISOString(),
+        },
       }),
     ).unwrap();
     router.back();
@@ -105,12 +108,7 @@ export default function EditWish() {
           }
         />
         <GiftDateSelector
-          desiredGiftDate={
-            new Date(
-              (formData.desiredGiftDate as any as { seconds: number }).seconds *
-                1000,
-            ) // TODO: remove any. firebase value is obj with seconds, not Date
-          }
+          desiredGiftDate={formData.desiredGiftDate}
           setDesiredGiftDate={(date) =>
             handleInputChange("desiredGiftDate", date)
           }

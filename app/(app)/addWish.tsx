@@ -90,7 +90,7 @@ export default function addWish() {
       currency,
       url,
       description,
-      desiredGiftDate,
+      desiredGiftDate: desiredGiftDate.toISOString(),
     };
     dispatch(addNewWish({ wish, listId: wishlistId || "", userId: uid || "" }));
     clearForm();
