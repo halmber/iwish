@@ -171,6 +171,27 @@ export async function deleteList(userId: string, listId: string) {
 }
 
 /**
+ * Deletes a specific wish from a given list in Firestore.
+ *
+ * @param userId - ID of the user.
+ * @param listId - ID of the list containing the wish.
+ * @param wishId - ID of the wish to delete.
+ */
+export const deleteWish = async (
+  userId: string,
+  listId: string,
+  wishId: string,
+) => {
+  const wishDocRef = doc(db, `users/${userId}/lists/${listId}/items/${wishId}`);
+
+  try {
+    await deleteDoc(wishDocRef);
+  } catch (error) {
+    throw new Error(`Failed to delete the wish: ${error}`);
+  }
+};
+
+/**
  * Fetches all lists of a specific user.
  * @param userId - ID of the user.
  */

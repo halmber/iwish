@@ -3,6 +3,7 @@ import { List } from "./types";
 import {
   createWishlist,
   deleteWishlist,
+  deleteWishThunk,
   fetchListItems,
   fetchLists,
   updateWishlist,
@@ -99,6 +100,24 @@ const listsSlice = createSlice({
       .addCase(updateWishlist.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to update wishlist";
+      })
+      // delete wish
+      .addCase(deleteWishThunk.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(deleteWishThunk.fulfilled, (state, action) => {
+        const index = state.data.findIndex(
+          (list) => list.id === action.meta.arg.listId,
+        );
+        state.data[index].items = state.data[index].items.filter(
+          (item) => item.id !== action.meta.arg.wishId,
+        );
+        state.status = "succeeded";
+      })
+      .addCase(deleteWishThunk.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to delete wish";
       });
   },
 });

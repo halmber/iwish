@@ -1,6 +1,7 @@
 import {
   createList,
   deleteList,
+  deleteWish,
   getListItems,
   getUserLists,
   updateList,
@@ -61,6 +62,23 @@ export const deleteWishlist = createAsyncThunk<void, string>(
     }
 
     await deleteList(userId, listId);
+  },
+);
+
+interface DeleteWishArgs {
+  wishId: string;
+  listId: string;
+}
+
+export const deleteWishThunk = createAsyncThunk<DeleteWishArgs, DeleteWishArgs>(
+  "lists/deleteWish",
+  async ({ wishId, listId }, { getState }) => {
+    const state = getState() as RootState;
+    const userId = state.auth.user?.uid || "";
+
+    await deleteWish(userId, listId, wishId);
+
+    return { wishId, listId };
   },
 );
 

@@ -8,6 +8,8 @@ import WishlistHeader from "@/components/myWishlists/WishlistHeader";
 import { selectWish } from "@/features/lists/selectors";
 import { InfoRow } from "@/components/wish";
 import { DesireLevelSelector } from "@/components/addWish";
+import { deleteWishThunk } from "@/features/lists/thunks";
+import { useEffect } from "react";
 
 export default function Wish() {
   const { listId, wishId } = useLocalSearchParams<{
@@ -19,10 +21,15 @@ export default function Wish() {
   const wish = useAppSelector((state) => selectWish(state, listId, wishId));
   const status = useAppSelector((state) => state.lists.status);
 
+  useEffect(() => {
+    if (!wish && status === "succeeded") {
+      router.back();
+    }
+  }, [wish, status]);
+
   const handleDelete = () => {
     if (wish) {
-      // dispatch(deleteWish(wish.id));
-      router.back();
+      dispatch(deleteWishThunk({ listId, wishId }));
     }
   };
 
