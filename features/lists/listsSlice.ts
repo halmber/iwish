@@ -7,6 +7,7 @@ import {
   fetchListItems,
   fetchLists,
   updateWishlist,
+  updateWishThunk,
 } from "./thunks";
 
 type ListsState = {
@@ -118,6 +119,27 @@ const listsSlice = createSlice({
       .addCase(deleteWishThunk.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to delete wish";
+      })
+      // update wish
+      .addCase(updateWishThunk.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(updateWishThunk.fulfilled, (state, action) => {
+        const index = state.data.findIndex(
+          (list) => list.id === action.meta.arg.listId,
+        );
+        state.data[index].items = state.data[index].items.map((item) => {
+          if (item.id === action.meta.arg.wishId) {
+            return { ...item, ...action.meta.arg.updatedData };
+          }
+          return item;
+        });
+        state.status = "succeeded";
+      })
+      .addCase(updateWishThunk.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to update wish";
       });
   },
 });

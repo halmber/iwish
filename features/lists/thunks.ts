@@ -5,6 +5,7 @@ import {
   getListItems,
   getUserLists,
   updateList,
+  updateWish,
 } from "@/services/firebase/firestore";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { List } from "./types";
@@ -101,5 +102,23 @@ export const updateWishlist = createAsyncThunk(
 
     const updatedList = await updateList(userId, listId, updatedData);
     return updatedList;
+  },
+);
+
+interface UpdateWishArgs {
+  wishId: string;
+  listId: string;
+  updatedData: Partial<Wish>;
+}
+
+export const updateWishThunk = createAsyncThunk<UpdateWishArgs, UpdateWishArgs>(
+  "wishes/updateWish",
+  async ({ wishId, listId, updatedData }, { getState }) => {
+    const state = getState() as RootState;
+    const userId = state.auth.user?.uid || "";
+
+    await updateWish(userId, listId, wishId, updatedData);
+
+    return { wishId, listId, updatedData };
   },
 );

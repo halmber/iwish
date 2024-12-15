@@ -67,7 +67,11 @@ export default function Wish() {
         wishlistName={wish.title}
         listId={listId}
         handleDelete={handleDelete}
-        handleEdit={() => {}}
+        handleEdit={() => {
+          router.push(
+            `/(app)/myWishLists/${listId}/wish/edit?wishId=${wishId}`,
+          );
+        }}
       />
 
       <ScrollView className="px-6 py-4">

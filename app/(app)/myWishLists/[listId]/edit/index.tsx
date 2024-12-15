@@ -8,6 +8,7 @@ import { ChevronLeftIcon } from "lucide-react-native";
 import Error from "@/components/Error";
 import Loading from "@/components/Loading";
 import { updateWishlist } from "@/features/lists/thunks";
+import { PageTitleWithBackBtn } from "@/components/myWishlists";
 
 export default function EditWishlist() {
   const { listId } = useLocalSearchParams<{ listId: string }>();
@@ -53,14 +54,7 @@ export default function EditWishlist() {
 
   return (
     <SafeAreaView className="flex-1 bg-[#1e1f35]">
-      <View className="flex-row items-center px-6 py-4">
-        <TouchableOpacity onPress={() => router.back()}>
-          <ChevronLeftIcon size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text className="text-2xl font-bold text-white ml-4">
-          Edit wishlist info
-        </Text>
-      </View>
+      <PageTitleWithBackBtn title="Edit wishlist info" />
 
       <ScrollView className="flex-1 px-6">
         <Text className="text-lg font-bold mb-2">Name</Text>

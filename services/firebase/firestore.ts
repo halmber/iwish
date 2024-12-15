@@ -223,3 +223,28 @@ export const getListItems = async <T>(userId: string, listId: string) => {
   })) as (T & { id: string; createdAt: string })[];
   return items;
 };
+
+/**
+ * Updates a specific wish in a given list in Firestore.
+ *
+ * @param userId - ID of the user.
+ * @param listId - ID of the list containing the wish.
+ * @param wishId - ID of the wish to update.
+ * @param updatedData - Object containing the updated fields and their values.
+ */
+export const updateWish = async (
+  userId: string,
+  listId: string,
+  wishId: string,
+  updatedData: Partial<Wish>,
+) => {
+  const wishDocRef = doc(db, `users/${userId}/lists/${listId}/items/${wishId}`);
+
+  try {
+    await updateDoc(wishDocRef, updatedData);
+
+    return { id: wishId, ...updatedData };
+  } catch (error) {
+    throw new Error(`Failed to update the wish: ${error}`);
+  }
+};
