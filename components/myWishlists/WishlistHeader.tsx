@@ -9,12 +9,14 @@ export interface WishlistHeaderProps {
   wishlistName: string;
   listId: string;
   handleDelete: () => void;
+  handleEdit?: () => void;
 }
 
 const WishlistHeader: React.FC<WishlistHeaderProps> = ({
   wishlistName,
   listId,
   handleDelete,
+  handleEdit = () => router.push(`/(app)/myWishLists/${listId}/edit`),
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -35,9 +37,7 @@ const WishlistHeader: React.FC<WishlistHeaderProps> = ({
         </TouchableOpacity>
 
         <View className="flex flex-row gap-4">
-          <TouchableOpacity
-            onPress={() => router.push(`/(app)/myWishLists/${listId}/edit`)}
-          >
+          <TouchableOpacity onPress={handleEdit}>
             <PencilIcon size={24} color="#fff" />
           </TouchableOpacity>
 

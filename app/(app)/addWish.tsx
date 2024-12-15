@@ -132,10 +132,15 @@ export default function addWish() {
           handleCreateNewList={handleCreateNewList}
         />
         <TitleInput title={title} setTitle={setTitle} />
-        <DesireLevelSelector
-          desireLvl={desireLvl}
-          setDesireLvl={setDesireLvl}
-        />
+        <View className="flex-row justify-between my-1">
+          <Text className="text-base font-medium">Desire Level</Text>
+          <DesireLevelSelector
+            desireLvl={desireLvl}
+            setDesireLvl={setDesireLvl}
+            classname="mb-4"
+          />
+        </View>
+
         <PriceInputs
           price={price}
           setPrice={setPrice}

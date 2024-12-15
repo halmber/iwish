@@ -1,6 +1,5 @@
 import { Card, Text } from "@/components/ui/";
 import { cn } from "@/lib/utils";
-import { View } from "react-native";
 
 interface WishlistCardProps {
   wishlistName: string;

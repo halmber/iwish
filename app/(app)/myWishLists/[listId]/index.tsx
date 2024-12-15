@@ -81,16 +81,26 @@ export default function WishlistDetails() {
 
           {currentWishlist.items.length !== 0 ? (
             currentWishlist.items.map((wish) => (
-              <TouchableOpacity key={wish.id} onPress={() => {}}>
+              <TouchableOpacity
+                key={wish.id}
+                onPress={() =>
+                  router.push({
+                    pathname: `/(app)/myWishLists/[listId]/wish`,
+                    params: { listId, wishId: wish.id },
+                  })
+                }
+              >
                 <Card key={wish.id} className="bg-[#27293d] p-4 mb-4">
-                  <Text className="text-xl font-bold mb-2">{wish.title}</Text>
-                  <Text className="text-sm text-gray-300 mb-2">
-                    {wish.description || "No description available."}
+                  <Text className="text-xl font-bold mb-1">{wish.title}</Text>
+
+                  <Text className="text-sm font-bold mb-2 text-gray-400">
+                    {wish.price ? `${wish.price} ${wish.currency}` : "N/A"}
                   </Text>
-                  <Text className="text-sm font-bold mb-2">
-                    {wish.price} {wish.currency}
-                  </Text>
-                  <DesireLevelSelector desireLvl={wish.desireLvl} />
+
+                  <View className="flex-row justify-between">
+                    <Text className="text-base font-medium">Desire Level</Text>
+                    <DesireLevelSelector desireLvl={wish.desireLvl} />
+                  </View>
                 </Card>
               </TouchableOpacity>
             ))
